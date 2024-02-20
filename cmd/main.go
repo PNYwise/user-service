@@ -24,6 +24,12 @@ func main() {
 	ctx := createMetadataContext(conf)
 	extConf := config.ConfigFromGrpcServer(ctx, conf)
 
+	//Initialize the db
+	db := config.DbConn(ctx, extConf)
+	defer db.Close(ctx)
+
+	//TODO: Initialize Kafka producer configuration
+
 	// Initialize gRPC server
 	srv := grpc.NewServer()
 

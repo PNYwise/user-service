@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"context"
 	"database/sql"
 	"time"
 )
@@ -19,11 +20,11 @@ type User struct {
 }
 
 type IUserService interface {
-	Create(user *User) (*User, error)
-	GetByUuid(uuid string) (*User, error)
+	Create(ctx context.Context, user *User) (*User, error)
+	GetByUuid(ctx context.Context, uuid string) (*User, error)
 }
 
 type IUserRepository interface {
-	Create(user *User) error
-	GetByUuid(Uuid string) (*User, error)
+	Create(ctx context.Context, user *User) error
+	GetByUuid(ctx context.Context, Uuid string) (*User, error)
 }

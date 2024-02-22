@@ -3,7 +3,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE IF NOT EXISTS users (
     id BIGSERIAL PRIMARY KEY, 
     uuid UUID DEFAULT uuid_generate_v4(),
-    email VARCHAR NOT NULL,
+    email VARCHAR,
     username VARCHAR(20) NOT NULL,
     timezone VARCHAR,
     followers BIGINT DEFAULT 0,

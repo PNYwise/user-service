@@ -12,7 +12,6 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at timestamp,
     deleted_at timestamp,
     CONSTRAINT unique_users_username UNIQUE (username),
-    CONSTRAINT unique_users_email UNIQUE (email),
     CONSTRAINT unique_users_uuid UNIQUE (uuid)
 );
 CREATE INDEX IF NOT EXISTS idx_users_deleted_at ON users (deleted_at) WHERE deleted_at IS NOT NULL;

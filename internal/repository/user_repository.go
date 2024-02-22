@@ -22,12 +22,12 @@ func (u *userRepository) Create(ctx context.Context, user *domain.User) error {
 	query := `
 		INSERT INTO users(email,username,timezone,created_at)
 		VALUES($1,$2,$3,$4)
-		RETURNING (id,uuid)`
+		RETURNING (id,uuid,followers,following,created_at)`
 	err := u.db.QueryRow(
 		ctx,
 		query,
 		user.Email, user.Username, user.Timezone, time.Now(),
-	).Scan(&user.Id, &user.Uuid, &user.Username, &user.Timezone, &user.CreatedAt)
+	).Scan(&user.Id, &user.Uuid, &user.Followers, &user.Following, &user.CreatedAt)
 	if err != nil {
 		fmt.Printf("Error executing query: %v", err)
 		return err

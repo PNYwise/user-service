@@ -19,8 +19,14 @@ type User struct {
 	DeletedAt sql.NullTime
 }
 
+type CreateUserRequest struct {
+	Email    string
+	Username string
+	Timezone string
+}
+
 type IUserService interface {
-	Create(ctx context.Context, user *User) (*User, error)
+	Create(ctx context.Context, request *CreateUserRequest) (*User, error)
 	GetByUuid(ctx context.Context, uuid string) (*User, error)
 }
 

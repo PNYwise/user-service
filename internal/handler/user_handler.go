@@ -38,5 +38,16 @@ func (u *userHandler) CreateUser(ctx context.Context, request *user_service.User
 }
 
 func (u *userHandler) GetUserByUuid(ctx context.Context, request *user_service.Uuid) (*user_service.UserDetail, error) {
-	return &user_service.UserDetail{}, nil
+	user, err := u.userService.GetByUuid(ctx, request.GetUuid())
+	if err != nil {
+		return nil, err
+	}
+	return &user_service.UserDetail{
+		Uuid:      user.Uuid,
+		Email:     user.Email,
+		Username:  user.Username,
+		Timezone:  user.Timezone,
+		Followers: user.Followers,
+		Following: user.Following,
+	}, nil
 }

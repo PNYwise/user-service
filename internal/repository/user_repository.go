@@ -37,7 +37,11 @@ func (u *userRepository) Create(ctx context.Context, user *domain.User) error {
 
 // GetByUuid implements domain.IUserRepository.
 func (p *userRepository) GetByUuid(ctx context.Context, Uuid string) (*domain.User, error) {
-	query := `SELECT u.id, u.uuid, u.username, u.timezone, u.created_at FROM users u WHERE u.uuid = $1 LIMIT 1`
+	query := `
+		SELECT u.id, u.uuid, u.username, u.timezone, u.created_at 
+		FROM users u 
+		WHERE u.uuid = $1 
+		LIMIT 1`
 	var user domain.User
 	err := p.db.QueryRow(ctx, query, Uuid).Scan(&user.Id, &user.Uuid, &user.Username, &user.Timezone, &user.CreatedAt)
 	if err != nil {

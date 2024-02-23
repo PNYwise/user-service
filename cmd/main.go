@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/PNYwise/user-service/internal"
 	"github.com/PNYwise/user-service/internal/config"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
@@ -32,6 +33,9 @@ func main() {
 
 	// Initialize gRPC server
 	srv := grpc.NewServer()
+
+	// Initialize gRPC server based on retrieved configuration
+	internal.InitGrpc(srv, db)
 
 	// Start server
 	serverPort := strconv.Itoa(extConf.App.Port)

@@ -29,6 +29,10 @@ func (u *userService) Create(ctx context.Context, request *domain.CreateUserRequ
 }
 
 // GetByUuid implements domain.IUserService.
-func (*userService) GetByUuid(ctx context.Context, uuid string) (*domain.User, error) {
-	panic("unimplemented")
+func (p *userService) GetByUuid(ctx context.Context, uuid string) (*domain.User, error) {
+	post, err := p.userRepo.GetByUuid(ctx, uuid)
+	if err != nil {
+		return nil, errors.New("internal server error")
+	}
+	return post, nil
 }

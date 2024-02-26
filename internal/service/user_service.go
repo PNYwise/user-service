@@ -8,11 +8,12 @@ import (
 )
 
 type userService struct {
-	userRepo domain.IUserRepository
+	userRepo          domain.IUserRepository
+	userMessagingRepo domain.IUserMessagingRepository
 }
 
-func NewUserService(userRepo domain.IUserRepository) domain.IUserService {
-	return &userService{userRepo}
+func NewUserService(userRepo domain.IUserRepository, userMessagingRepo domain.IUserMessagingRepository) domain.IUserService {
+	return &userService{userRepo, userMessagingRepo}
 }
 
 // Create implements domain.IUserService.
@@ -23,6 +24,9 @@ func (u *userService) Create(ctx context.Context, request *domain.CreateUserRequ
 		Timezone: request.Timezone,
 	}
 	if err := u.userRepo.Create(ctx, user); err != nil {
+		return nil, errors.New("internal server error")
+	}
+	if err := u.userMessagingRepo.PublishMessage(user); err != nil {
 		return nil, errors.New("internal server error")
 	}
 	return user, nil

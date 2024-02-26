@@ -10,9 +10,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// init mock
 var mockUserRepo = new(_mock.UserRepositoryMock)
+var mockUserMessagingRepo = new(_mock.UserMessagingRepositoryMock)
+
+// ctx
 var ctx = context.Background()
-var calledUserService = NewUserService(mockUserRepo)
+
+// call user service
+var calledUserService = NewUserService(mockUserRepo, mockUserMessagingRepo)
+
 var email = "test@gmail.com"
 var username = "test.test"
 var timeZone = "Asia/Jakarta"
@@ -33,10 +40,12 @@ func TestCreate(t *testing.T) {
 
 	// Expect the Create method to be called with the correct argument
 	mockUserRepo.On("Create", ctx, user).Return(nil)
+	mockUserMessagingRepo.On("PublishMessage", user).Return(nil)
 	createUser, err := calledUserService.Create(ctx, request)
 
 	// Assert that the mock repository's Create method was called with the correct argument
 	mockUserRepo.AssertExpectations(t)
+	mockUserMessagingRepo.AssertExpectations(t)
 	assert.NoError(t, err)
 	assert.Equal(t, request.Email, createUser.Email)
 	assert.Equal(t, request.Timezone, createUser.Timezone)

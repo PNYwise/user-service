@@ -29,13 +29,19 @@ func main() {
 	db := config.DbConn(ctx, extConf)
 	defer db.Close(ctx)
 
-	//TODO: Initialize Kafka producer configuration
+	//Initialize Kafka producer configuration
+	producer := config.GetKafkaProducer(extConf)
+	defer func() {
+		if err := producer.Close(); err != nil {
+			log.Fatalf("Error closing Kafka producer: %v", err)
+		}
+	}()
 
 	// Initialize gRPC server
 	srv := grpc.NewServer()
 
 	// Initialize gRPC server based on retrieved configuration
-	internal.InitGrpc(srv, db)
+	internal.InitGrpc(srv, db, producer, extConf)
 
 	// Start server
 	serverPort := strconv.Itoa(extConf.App.Port)

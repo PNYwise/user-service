@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/PNYwise/user-service/internal/domain"
@@ -49,6 +50,24 @@ func (u *userRepository) GetByUuid(ctx context.Context, Uuid string) (*domain.Us
 		return nil, err
 	}
 	return &user, nil
+}
+
+// ExistByUsername implements domain.IUserRepository.
+func (u *userRepository) ExistByUsername(ctx context.Context, username string) (bool, error) {
+	query := "SELECT EXISTS(SELECT 1 FROM users WHERE username = $1)"
+	var exist bool
+	row, err := u.db.Query(context.Background(), query, username)
+	if err != nil {
+		log.Fatalf("Error executing query: %v", err)
+		return false, err
+	}
+	for row.Next() {
+		if err := row.Scan(&exist); err != nil {
+			log.Fatalf("Error Scaning query: %v", err)
+			return false, err
+		}
+	}
+	return exist, nil
 }
 
 // TODO: exist by email, username

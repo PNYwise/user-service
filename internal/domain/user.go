@@ -33,6 +33,7 @@ type IUserService interface {
 type IUserRepository interface {
 	Create(ctx context.Context, user *User) error
 	GetByUuid(ctx context.Context, Uuid string) (*User, error)
+	ExistByUsername(ctx context.Context, username string) (bool, error)
 }
 
 type IUserMessagingRepository interface {

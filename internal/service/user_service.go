@@ -23,6 +23,11 @@ func (u *userService) Create(ctx context.Context, request *domain.CreateUserRequ
 		Username: request.Username,
 		Timezone: request.Timezone,
 	}
+
+	if ok, _ := u.userRepo.ExistByUsername(ctx, request.Username); ok {
+		return nil, errors.New("Username already exist")
+	}
+
 	if err := u.userRepo.Create(ctx, user); err != nil {
 		return nil, errors.New("internal server error")
 	}

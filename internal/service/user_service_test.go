@@ -40,6 +40,7 @@ func TestCreate(t *testing.T) {
 
 	// Expect the Create method to be called with the correct argument
 	mockUserRepo.On("Create", ctx, user).Return(nil)
+	mockUserRepo.On("ExistByUsername", ctx, username).Return(false, nil)
 	mockUserMessagingRepo.On("PublishMessage", user).Return(nil)
 	createUser, err := calledUserService.Create(ctx, request)
 
